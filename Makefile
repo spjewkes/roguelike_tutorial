@@ -1,5 +1,5 @@
 CPP=g++
-CPPFLAGS=-std=c++11 -Wall -Wextra
+CPPFLAGS=-std=c++11 -Wall -Wextra -I libtcod-mac/include -I /usr/local/include/SDL
 LIBS=
 EXE=run_roguelike
 
@@ -16,10 +16,10 @@ OS := $(shell uname)
 
 ifeq ($(OS),Darwin)
 # Mac OS
-	LIBS+=-framework SDL2
+	LIBS+=-L libtcod-mac -lSDL -ltcod -ltcodxx
 else
 # Assume Linux for now
-	LIBS+=-lSDL2
+	LIBS+=-lSDL
 endif
 
 default: debug
@@ -41,6 +41,9 @@ $(EXE): $(OBJ)
 
 setup_build:
 	@cd libtcod-mac; make -f makefiles/makefile-osx release
+	@cp -p libtcod-mac/libtcod.dylib .
+	@cp -p libtcod-mac/libtcodxx.dylib .
+	@cp -p libtcod-mac/terminal.png .
 	@mkdir -p $(OBJ_DIR)
 
 .PHONY: clean
@@ -48,3 +51,4 @@ setup_build:
 clean:
 	@echo "Cleaning"
 	@rm -f $(OBJ_DIR)/*.o *~ $(SRC_DIR)/*~
+	@rm -f libtcod* terminal.png
