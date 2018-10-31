@@ -1,10 +1,10 @@
 #include <libtcod.hpp>
+#include "actor.hpp"
 
 int main()
 {
 	bool is_running = true;
-	int playerx = 40;
-	int playery = 25;
+	Actor player{40, 25, '@', TCODColor::white};
 	
 	TCODConsole::initRoot(80,50,"libtcod C++ tutorial", false);
 	while (is_running && !TCODConsole::isWindowClosed())
@@ -14,19 +14,19 @@ int main()
 		switch(key.vk)
 		{
 		case TCODK_UP:
-			playery--;
+			player.y--;
 			break;
 
 		case TCODK_DOWN:
-			playery++;
+			player.y++;
 			break;
 
 		case TCODK_LEFT:
-			playerx--;
+			player.x--;
 			break;
 
 		case TCODK_RIGHT:
-			playerx++;
+			player.x++;
 			break;
 
 		case TCODK_ESCAPE:
@@ -38,7 +38,7 @@ int main()
 		}
 
 		TCODConsole::root->clear();
-		TCODConsole::root->putChar(playerx, playery, '@');
+		player.render();
 		TCODConsole::flush();
 	}
 
