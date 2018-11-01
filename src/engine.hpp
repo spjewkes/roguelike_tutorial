@@ -28,19 +28,31 @@ public:
 			switch(key.vk)
 			{
 			case TCODK_UP:
-				player->y--;
+				if (!world->isWall(player->x, player->y - 1))
+				{
+					player->y--;
+				}
 				break;
 
 			case TCODK_DOWN:
-				player->y++;
+				if (!world->isWall(player->x, player->y + 1))
+				{
+					player->y++;
+				}
 				break;
 
 			case TCODK_LEFT:
-				player->x--;
+				if (!world->isWall(player->x - 1, player->y))
+				{
+					player->x--;
+				}
 				break;
 
 			case TCODK_RIGHT:
-				player->x++;
+				if (!world->isWall(player->x + 1, player->y))
+				{
+					player->x++;
+				}
 				break;
 
 			case TCODK_ESCAPE:
