@@ -1,10 +1,12 @@
 #include <libtcod.hpp>
 #include "actor.hpp"
+#include "map.hpp"
 
 int main()
 {
 	bool is_running = true;
 	Actor player{40, 25, '@', TCODColor::white};
+	Map world(80, 50);
 	
 	TCODConsole::initRoot(80,50,"libtcod C++ tutorial", false);
 	while (is_running && !TCODConsole::isWindowClosed())
@@ -38,6 +40,7 @@ int main()
 		}
 
 		TCODConsole::root->clear();
+		world.render();
 		player.render();
 		TCODConsole::flush();
 	}
