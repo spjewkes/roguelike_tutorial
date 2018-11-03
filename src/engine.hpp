@@ -17,6 +17,10 @@ public:
 	TCODList<Actor*> actors;
 	Actor *player;
 	Map *world;
+	int fovRadius{10};
+
+private:
+	bool computeFov{true};
 };
 
 extern Engine engine;
