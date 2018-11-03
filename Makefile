@@ -9,7 +9,7 @@ SRC_DIR=src
 _DEPS=actor.hpp bsplistener.hpp engine.hpp map.hpp
 DEPS=$(patsubst %,$(SRC_DIR)/%,$(_DEPS))
 
-_OBJ=main.o bsplistener.o map.o
+_OBJ=actor.o bsplistener.o engine.o main.o map.o
 OBJ=$(patsubst %,$(OBJ_DIR)/%,$(_OBJ))
 
 OS := $(shell uname)

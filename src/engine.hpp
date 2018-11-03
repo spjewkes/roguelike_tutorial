@@ -8,73 +8,11 @@
 class Engine
 {
 public:
-	Engine()
-		{
-			TCODConsole::initRoot(80,50,"libtcod C++ tutorial", false);
-			player = new Actor(40, 25, '@', TCODColor::white);
-			actors.push(player);
-			world = new Map(80, 45);
-		}
+	Engine();
+	virtual ~Engine();
 
-	virtual ~Engine()
-		{
-			actors.clearAndDelete();
-			delete world;
-		}
-
-	void update(bool &quit)
-		{
-			quit = false;
-			TCOD_key_t key;
-			TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
-			switch(key.vk)
-			{
-			case TCODK_UP:
-				if (!world->isWall(player->x, player->y - 1))
-				{
-					player->y--;
-				}
-				break;
-
-			case TCODK_DOWN:
-				if (!world->isWall(player->x, player->y + 1))
-				{
-					player->y++;
-				}
-				break;
-
-			case TCODK_LEFT:
-				if (!world->isWall(player->x - 1, player->y))
-				{
-					player->x--;
-				}
-				break;
-
-			case TCODK_RIGHT:
-				if (!world->isWall(player->x + 1, player->y))
-				{
-					player->x++;
-				}
-				break;
-
-			case TCODK_ESCAPE:
-				quit = true;
-				break;
-
-			default:
-				break;
-			}
-		}
-
-	void render()
-		{
-			TCODConsole::root->clear();
-			world->render();
-			for (auto actor : actors)
-			{
-				actor->render();
-			}
-		}
+	void update(bool &quit);
+	void render();
 
 	TCODList<Actor*> actors;
 	Actor *player;
