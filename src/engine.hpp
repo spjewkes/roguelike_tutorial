@@ -1,3 +1,6 @@
+#ifndef __ENGINE_HPP__
+#define __ENGINE_HPP__
+
 #include <libtcod.hpp>
 #include "actor.hpp"
 #include "map.hpp"
@@ -10,8 +13,7 @@ public:
 			TCODConsole::initRoot(80,50,"libtcod C++ tutorial", false);
 			player = new Actor(40, 25, '@', TCODColor::white);
 			actors.push(player);
-			actors.push(new Actor(60, 13, '@', TCODColor::yellow));
-			world = new Map(80, 50);
+			world = new Map(80, 45);
 		}
 
 	virtual ~Engine()
@@ -74,8 +76,11 @@ public:
 			}
 		}
 
-private:
 	TCODList<Actor*> actors;
 	Actor *player;
 	Map *world;
 };
+
+extern Engine engine;
+
+#endif

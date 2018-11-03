@@ -1,58 +1,35 @@
+#ifndef __MAP_HPP__
+#define __MAP_HPP__
+
 #include <libtcod.hpp>
+#include "bsplistener.hpp"
+
+static const int ROOM_MAX_SIZE = 12;
+static const int ROOM_MIN_SIZE = 6;
 
 struct Tile
 {
-	bool canWalk{true}; // Can we walk through a tile?
+	bool canWalk{false}; // Can we walk through a tile?
 };
 
 class Map
 {
 public:
-	Map(int width, int height) : width(width), height(height)
-		{
-			tiles = new Tile[width * height];
-			setWall(30, 22);
-			setWall(50, 22);
-		}
+	Map(int width, int height);
+	virtual ~Map();
 
-	virtual ~Map()
-		{
-			delete [] tiles;
-		}
-
-	bool isWall(int x, int y) const
-		{
-			return !tiles[x + y * width].canWalk;
-		}
-
-	void render() const
-		{
-			static const TCODColor darkWall(0,0,100);
-			static const TCODColor darkGround(50,50,150);
-
-			for (int x=0; x<width; x++)
-			{
-				for (int y=0; y<height; y++)
-				{
-					if (isWall(x, y))
-					{
-						TCODConsole::root->setCharBackground(x, y, darkWall);
-					}
-					else
-					{
-						TCODConsole::root->setCharBackground(x, y, darkGround);
-					}
-				}
-			}
-		}
+	bool isWall(int x, int y) const;
+	void render() const;
 
 protected:
 	int width;
 	int height;
 	Tile *tiles;
+	friend class BspListener;
 
-	void setWall(int x, int y)
-		{
-			tiles[x + y * width].canWalk = false;
-		}
+	void dig(int x1, int y1, int x2, int y2);
+	void createRoom(bool first, int x1, int y1, int x2, int y2);
+	void setWall(int x, int y);
 };
+
+#endif

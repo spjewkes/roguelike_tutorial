@@ -1,9 +1,10 @@
 #include <libtcod.hpp>
 #include "engine.hpp"
 
+Engine engine;
+
 int main()
 {
-	Engine engine;
 	bool quit = false;
 	
 	while (!quit && !TCODConsole::isWindowClosed())

@@ -1,3 +1,6 @@
+#ifndef __ACTOR_HPP__
+#define __ACTOR_HPP__
+
 #include <libtcod.hpp>
 
 class Actor
@@ -17,3 +20,5 @@ public:
 			TCODConsole::root->setCharForeground(x,y,col);
 		}
 };
+
+#endif
