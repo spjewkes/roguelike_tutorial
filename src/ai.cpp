@@ -137,9 +137,9 @@ bool MonsterAi::moveOrAttack(Actor *owner, int targetx, int targety)
 		{
 			owner->y += stepy;
 		}
-		else if (owner->attacker)
-		{
+	}
+	else if (owner->attacker)
+	{
 			owner->attacker->attack(owner, engine.player);
-		}
 	}
 }
