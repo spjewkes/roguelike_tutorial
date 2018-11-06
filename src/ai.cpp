@@ -8,6 +8,12 @@
 
 void PlayerAi::update(Actor *owner)
 {
+	if (engine.lastKey.vk == TCODK_ESCAPE)
+	{
+		engine.gameStatus = Engine::QUIT;
+		return;
+	}
+
 	if (owner->destructible && owner->destructible->isDead())
 	{
 		return;
@@ -34,16 +40,11 @@ void PlayerAi::update(Actor *owner)
 		dx = 1;
 		break;
 
-	case TCODK_ESCAPE:
-		engine.gameStatus = Engine::QUIT;
-		break;
-
 	default:
 		break;
 	}
 
-	if ((engine.gameStatus != Engine::QUIT) &&
-		(dx != 0 || dy != 0))
+	if (dx != 0 || dy != 0)
 	{
 		engine.gameStatus = Engine::NEW_TURN;
 		if (moveOrAttack(owner, owner->x + dx, owner->y + dy))
