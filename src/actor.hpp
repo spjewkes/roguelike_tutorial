@@ -25,7 +25,6 @@ public:
 	Actor(int x, int y, int ch, const char *name, const TCODColor &col);
 	virtual ~Actor();
 
-	bool moveOrAttack(int x, int y);
 	void update();
 	void render() const;
 };
