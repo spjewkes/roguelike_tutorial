@@ -1,9 +1,9 @@
 #include "engine.hpp"
 
-Engine::Engine()
+Engine::Engine() : gameStatus(STARTUP)
 {
 	TCODConsole::initRoot(80,50,"libtcod C++ tutorial", false);
-	player = new Actor(40, 25, '@', TCODColor::white);
+	player = new Actor(40, 25, '@', "player", TCODColor::white);
 	actors.push(player);
 	world = new Map(80, 45);
 }
@@ -16,7 +16,16 @@ Engine::~Engine()
 
 void Engine::update(bool &quit)
 {
+	if (gameStatus == STARTUP)
+	{
+		world->computeFov();
+	}
+	gameStatus = IDLE;
+
+	int dx = 0;
+	int dy = 0;
 	quit = false;
+
 	TCOD_key_t key;
 	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
 	switch(key.vk)
@@ -24,32 +33,28 @@ void Engine::update(bool &quit)
 	case TCODK_UP:
 		if (!world->isWall(player->x, player->y - 1))
 		{
-			player->y--;
-			computeFov = true;
+			dy = -1;
 		}
 		break;
 
 	case TCODK_DOWN:
 		if (!world->isWall(player->x, player->y + 1))
 		{
-			player->y++;
-			computeFov = true;
+			dy = 1;
 		}
 		break;
 
 	case TCODK_LEFT:
 		if (!world->isWall(player->x - 1, player->y))
 		{
-			player->x--;
-			computeFov = true;
+			dx = -1;
 		}
 		break;
 
 	case TCODK_RIGHT:
 		if (!world->isWall(player->x + 1, player->y))
 		{
-			player->x++;
-			computeFov = true;
+			dx = 1;
 		}
 		break;
 
@@ -61,10 +66,24 @@ void Engine::update(bool &quit)
 		break;
 	}
 
-	if (computeFov)
+	if (dx != 0 || dy != 0)
 	{
-		world->computeFov();
-		computeFov = false;
+		gameStatus = NEW_TURN;
+		if (player->moveOrAttack(player->x + dx, player->y + dy))
+		{
+			world->computeFov();
+		}
+	}
+
+	if (gameStatus == NEW_TURN)
+	{
+		for (Actor *actor : actors)
+		{
+			if (actor != player)
+			{
+				actor->update();
+			}
+		}
 	}
 }
 

@@ -11,6 +11,15 @@ public:
 	Engine();
 	virtual ~Engine();
 
+	enum GameStatus
+	{
+		STARTUP,
+		IDLE,
+		NEW_TURN,
+		VICTORY,
+		DEFEAT,
+	} gameStatus;
+
 	void update(bool &quit);
 	void render();
 
@@ -18,9 +27,6 @@ public:
 	Actor *player;
 	Map *world;
 	int fovRadius{10};
-
-private:
-	bool computeFov{true};
 };
 
 extern Engine engine;

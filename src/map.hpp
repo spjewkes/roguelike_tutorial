@@ -3,9 +3,7 @@
 
 #include <libtcod.hpp>
 #include "bsplistener.hpp"
-
-static const int ROOM_MAX_SIZE = 12;
-static const int ROOM_MIN_SIZE = 6;
+#include "defs.hpp"
 
 struct Tile
 {
@@ -21,7 +19,11 @@ public:
 	bool isWall(int x, int y) const;
 	bool isExplored(int x, int y) const;
 	bool isInFov(int x, int y) const;
+	bool canWalk(int x, int y) const;
 	void computeFov();
+	void addMonster(int x, int y);
+	void update();
+	bool moveOrAttack(int x, int y);
 	void render() const;
 
 protected:
