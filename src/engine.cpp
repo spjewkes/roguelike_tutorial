@@ -1,9 +1,17 @@
 #include "engine.hpp"
+#include "destructible.hpp"
+#include "attacker.hpp"
+#include "ai.hpp"
 
-Engine::Engine() : gameStatus(STARTUP)
+Engine::Engine(int screenWidth, int screenHeight)
+	: gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight)
 {
-	TCODConsole::initRoot(80,50,"libtcod C++ tutorial", false);
+	TCODConsole::initRoot(screenWidth, screenHeight, "libtcod C++ tutorial", false);
+
 	player = new Actor(40, 25, '@', "player", TCODColor::white);
+	player->destructible = new PlayerDestructible(30, 2, "your cadaver");
+	player->attacker = new Attacker(5);
+	player->ai = new PlayerAi();
 	actors.push(player);
 	world = new Map(80, 45);
 }
@@ -14,66 +22,29 @@ Engine::~Engine()
 	delete world;
 }
 
+void Engine::sendToBack(Actor *actor)
+{
+	actors.remove(actor);
+	actors.insertBefore(actor, 0);
+}
+
 void Engine::update(bool &quit)
 {
 	if (gameStatus == STARTUP)
 	{
 		world->computeFov();
 	}
+	if (gameStatus == QUIT)
+	{
+		quit = true;
+		return;
+	}
+	
 	gameStatus = IDLE;
-
-	int dx = 0;
-	int dy = 0;
 	quit = false;
 
-	TCOD_key_t key;
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
-	switch(key.vk)
-	{
-	case TCODK_UP:
-		if (!world->isWall(player->x, player->y - 1))
-		{
-			dy = -1;
-		}
-		break;
-
-	case TCODK_DOWN:
-		if (!world->isWall(player->x, player->y + 1))
-		{
-			dy = 1;
-		}
-		break;
-
-	case TCODK_LEFT:
-		if (!world->isWall(player->x - 1, player->y))
-		{
-			dx = -1;
-		}
-		break;
-
-	case TCODK_RIGHT:
-		if (!world->isWall(player->x + 1, player->y))
-		{
-			dx = 1;
-		}
-		break;
-
-	case TCODK_ESCAPE:
-		quit = true;
-		break;
-
-	default:
-		break;
-	}
-
-	if (dx != 0 || dy != 0)
-	{
-		gameStatus = NEW_TURN;
-		if (player->moveOrAttack(player->x + dx, player->y + dy))
-		{
-			world->computeFov();
-		}
-	}
+	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS,&lastKey,NULL);
+	player->update();
 
 	if (gameStatus == NEW_TURN)
 	{
@@ -98,4 +69,10 @@ void Engine::render()
 			actor->render();
 		}
 	}
+
+	player->render();
+	TCODConsole::root->print(1, screenHeight = 2, "HP : %d/%d",
+							 static_cast<int>(player->destructible->hp),
+							 static_cast<int>(player->destructible->maxHp));
+											  
 }

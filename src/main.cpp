@@ -1,7 +1,7 @@
 #include <libtcod.hpp>
 #include "engine.hpp"
 
-Engine engine;
+Engine engine{80, 50};
 
 int main()
 {

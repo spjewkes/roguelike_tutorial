@@ -1,15 +1,27 @@
 #include "actor.hpp"
 #include "engine.hpp"
+#include "destructible.hpp"
+#include "attacker.hpp"
+#include "ai.hpp"
 
 Actor::Actor(int x, int y, int ch, const char *name, const TCODColor &col)
-	: x(x), y(y), ch(ch), col(col)
+	: x(x), y(y), ch(ch), col(col), name(name)
 {
-	strcpy(this->name, name);
 }
 
 void Actor::update()
 {
-	printf("The %s growls!\n", name);
+	if (ai)
+	{
+		ai->update(this);
+	}
+}
+
+Actor::~Actor()
+{
+	delete attacker;
+	delete destructible;
+	delete ai;
 }
 
 bool Actor::moveOrAttack(int x, int y)

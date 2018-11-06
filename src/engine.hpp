@@ -8,7 +8,7 @@
 class Engine
 {
 public:
-	Engine();
+	Engine(int screenWidth, int screenHeight);
 	virtual ~Engine();
 
 	enum GameStatus
@@ -18,7 +18,10 @@ public:
 		NEW_TURN,
 		VICTORY,
 		DEFEAT,
+		QUIT,
 	} gameStatus;
+
+	void sendToBack(Actor *actor);
 
 	void update(bool &quit);
 	void render();
@@ -27,6 +30,10 @@ public:
 	Actor *player;
 	Map *world;
 	int fovRadius{10};
+
+	int screenWidth;
+	int screenHeight;
+	TCOD_key_t lastKey;
 };
 
 extern Engine engine;

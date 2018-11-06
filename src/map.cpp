@@ -1,6 +1,9 @@
 #include "map.hpp"
 #include <utility>
 #include "engine.hpp"
+#include "destructible.hpp"
+#include "attacker.hpp"
+#include "ai.hpp"
 
 Map::Map(int width, int height) : width(width), height(height)
 {
@@ -48,7 +51,7 @@ bool Map::canWalk(int x, int y) const
 
 	for (Actor *actor : engine.actors)
 	{
-		if (actor->x == x && actor->y == y )
+		if (actor->blocks && actor->x == x && actor->y == y )
 		{
 			// There is an actor there, cannot walk
 			return false;
@@ -69,12 +72,20 @@ void Map::addMonster(int x, int y)
 	if (rng->getInt(0, 100) < 80)
 	{
 		// Create an orc
-		engine.actors.push(new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen));
+		Actor *orc = new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen);
+		orc->destructible = new MonsterDestructible(10, 0, "dead orc");
+		orc->attacker = new Attacker(3);
+		orc->ai = new MonsterAi();
+		engine.actors.push(orc);
 	}
 	else
 	{
 		// Create troll
-		engine.actors.push(new Actor(x, y, 'T', "troll", TCODColor::darkerGreen));
+		Actor *troll = new Actor(x, y, 'T', "troll", TCODColor::darkerGreen);
+		troll->destructible = new MonsterDestructible(16, 1, "dead troll");
+		troll->attacker = new Attacker(4);
+		troll->ai = new MonsterAi();
+		engine.actors.push(troll);
 	}
 }
 
