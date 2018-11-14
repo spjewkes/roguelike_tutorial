@@ -4,6 +4,7 @@
 #include <libtcod.hpp>
 #include "actor.hpp"
 #include "map.hpp"
+#include "gui.hpp"
 
 class Engine
 {
@@ -33,6 +34,7 @@ public:
 
 	int screenWidth;
 	int screenHeight;
+	Gui *gui;
 	TCOD_key_t lastKey;
 };
 

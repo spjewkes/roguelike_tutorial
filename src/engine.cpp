@@ -13,13 +13,17 @@ Engine::Engine(int screenWidth, int screenHeight)
 	player->attacker = new Attacker(5);
 	player->ai = new PlayerAi();
 	actors.push(player);
-	world = new Map(80, 45);
+	world = new Map(80, 43);
+	gui = new Gui();
+
+	gui->message(TCODColor::red, "Welcome stranger!\nPrepare to perish in the Tombs of the Ancient Kings.");
 }
 
 Engine::~Engine()
 {
 	actors.clearAndDelete();
 	delete world;
+	delete gui;
 }
 
 void Engine::sendToBack(Actor *actor)
@@ -71,8 +75,5 @@ void Engine::render()
 	}
 
 	player->render();
-	TCODConsole::root->print(1, screenHeight = 2, "HP : %d/%d",
-							 static_cast<int>(player->destructible->hp),
-							 static_cast<int>(player->destructible->maxHp));
-											  
+	gui->render();
 }

@@ -6,10 +6,10 @@ EXE=run_roguelike
 OBJ_DIR=obj
 SRC_DIR=src
 
-_DEPS=actor.hpp ai.hpp attacker.hpp bsplistener.hpp destructible.hpp engine.hpp map.hpp
+_DEPS=actor.hpp ai.hpp attacker.hpp bsplistener.hpp destructible.hpp engine.hpp gui.hpp map.hpp
 DEPS=$(patsubst %,$(SRC_DIR)/%,$(_DEPS))
 
-_OBJ=actor.o ai.o attacker.o bsplistener.o destructible.o engine.o main.o map.o
+_OBJ=actor.o ai.o attacker.o bsplistener.o destructible.o engine.o gui.o main.o map.o
 OBJ=$(patsubst %,$(OBJ_DIR)/%,$(_OBJ))
 
 OS := $(shell uname)
