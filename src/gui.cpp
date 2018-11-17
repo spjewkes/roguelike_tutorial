@@ -50,6 +50,8 @@ void Gui::render()
 		}
 	}
 
+	renderMouseLook();
+
 	// Blit the GUI console to the root console
 	TCODConsole::blit(con, 0, 0, engine.screenWidth, PANEL_HEIGHT,
 					  TCODConsole::root, 0, engine.screenHeight-PANEL_HEIGHT);
@@ -113,4 +115,36 @@ void Gui::message(const TCODColor &col, const char *text, ...)
 		// Go to next line
 		lineBegin = lineEnd + 1;
 	} while (lineEnd);
+}
+
+void Gui::renderMouseLook()
+{
+	if (!engine.world->isInFov(engine.mouse.cx, engine.mouse.cy))
+	{
+		// If mouse is out of FOV , nothing to render
+		return;
+	}
+
+	char buf[128] = {'\0'};
+
+	bool first = true;
+	for (Actor *actor : engine.actors)
+	{
+		if (actor->x == engine.mouse.cx && actor->y == engine.mouse.cy)
+		{
+			if (!first)
+			{
+				strcat(buf, ", ");
+			}
+			else
+			{
+				first = false;
+			}
+			strcat(buf, actor->name);
+		}
+	}
+
+	// Display the list of actors under the mouse cursor
+	con->setDefaultForeground(TCODColor::lightGrey);
+	con->print(1, 0, buf);
 }
