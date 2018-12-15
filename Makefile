@@ -40,8 +40,8 @@ $(EXE): $(OBJ)
 	$(CPP) $(CPPFLAGS) $(LIBS) $^ -o $@
 
 setup_build:
-	@cd libtcod; scons -C build/scons/ -j 4 develop_libtcod MODE=RELEASE
-	@cp -p libtcod/libtcod.dylib .
+	@cd libtcod/build/autotools ; autoreconf -i ; ./configure CFLAGS='-O2' --prefix=$(PWD)/libtcod/; make -j 4; make install
+	@cp -pL libtcod/lib/libtcod.dylib .
 	@cp -p libtcod/terminal.png .
 	@mkdir -p $(OBJ_DIR)
 
@@ -51,6 +51,6 @@ clean:
 	@echo "Cleaning"
 	@rm -f $(OBJ_DIR)/*.o *~ $(SRC_DIR)/*~
 	@rm -f libtcod.* terminal.png
-	@cd libtcod; scons -C build/scons/ -c
+	@cd libtcod/build/autotools ; make clean
 	@rm run_roguelike
 
